@@ -4,7 +4,7 @@ require 'net/http'
 require 'json'
 
 module ExpressPigeon
-  AUTH_KEY = ENV['EXPRESSPIGEON_AUTH_KEY'] or fail('Provide EXPRESSPIGEON_AUTH_KEY environment variable')
+  AUTH_KEY = -> { ENV['EXPRESSPIGEON_AUTH_KEY'] || fail('Provide EXPRESSPIGEON_AUTH_KEY or set ExpressPigeon::AUTH_KEY environment variable') }
   ROOT = 'https://api.expresspigeon.com/'.freeze
   USE_SSL = true
   module API
