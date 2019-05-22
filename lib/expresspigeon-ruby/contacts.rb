@@ -24,7 +24,7 @@ module ExpressPigeon
     # :returns: representation of a contact
     #
     def upsert(list_id, contact)
-      post @endpoint, params = {:list_id => list_id, :contacts => [contact]}
+      post @endpoint, params = { list_id: list_id, contacts: [contact].flatten }
     end
 
     # Delete single contact. If list_id is not provided, contact will be deleted from system.

@@ -114,6 +114,21 @@ describe 'contacts integration test' do
     ExpressPigeon::API.lists.delete list_response.list.id
   end
 
+  it 'updates multiple contacts' do
+    list_response = ExpressPigeon::API.lists.create('My Lists', 'John Doe', "a@a.a")
+    resp = ExpressPigeon::API.contacts.upsert(
+      list_response.list.id,
+      [
+        { email: 'mary@e.e', first_name: 'Mary', last_name: 'Johns' },
+        { email: 'gary@e.e', first_name: 'Gary', last_name: 'Johns' },
+      ]
+    )
+    validate_response resp, 200, 'success', /contacts created\/updated successfully/
+    expect(ExpressPigeon::API.contacts.find_by_email("mary@e.e").last_name).to eq 'Johns'
+    expect(ExpressPigeon::API.contacts.find_by_email("gary@e.e").first_name).to eq 'Gary'
+    ExpressPigeon::API.lists.delete list_response.list.id
+  end
+
   it 'cannot delete contact with non-existent email' do
     res = ExpressPigeon::API.contacts.delete("g@g.g")
     validate_response res, 404, 'error', /contact=g@g.g not found/
@@ -165,4 +180,3 @@ describe 'contacts integration test' do
     ExpressPigeon::API.contacts.delete('mary@e.e')
   end
 end
-
