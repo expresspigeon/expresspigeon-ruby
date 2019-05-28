@@ -12,7 +12,7 @@ module ExpressPigeon
 
 
 
-    # JSON document represents a contact to be created or updated.
+    # JSON list represents contacts to be created or updated.
     # The email field is required.
     # When updating a contact, list_id is optional,
     # since the contact is uniquely identified by email across all lists.
@@ -21,10 +21,10 @@ module ExpressPigeon
     #
     # :param contact: Hash describes new contact. The "email" field is required.
     #
-    # :returns: representation of a contact
+    # :returns: :status, :code, :messages, :contacts and :failed_contact_num if contact failed to create
     #
-    def upsert(list_id, contact)
-      post @endpoint, params = {:list_id => list_id, :contacts => [contact]}
+    def upsert(list_id, contacts)
+      post @endpoint, params = { list_id: list_id, contacts: [contacts].flatten }
     end
 
     # Delete single contact. If list_id is not provided, contact will be deleted from system.
